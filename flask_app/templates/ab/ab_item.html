@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Details{% endblock %}
+
+{% block second_nav %}
+{% include "ab/_second_nav.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+{% if exp %}
+    <h1>{{ exp.clean_name }}</h1>
+    <p>{{ exp.metrics_json.get("cnt_users_all") }}</p>
+{% endif %}
+</div>
+{% endblock %}

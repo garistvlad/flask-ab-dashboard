@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "macros/_pagination.html" import render_pagination %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Search form -->
+    <form action="{{ url_for('ab.index') }}" method="GET">
+        <div class="form-group my-1">
+        {% if q and q != "" %}
+            <p class="lead">Result for: <i>{{ q }}</i></p>
+        {% endif %}
+            <i class="fa fa-search form-control-feedback"></i>
+            <input class="form-control" type="text" name="q" placeholder="Search" aria-label="Search">
+        </div>
+    </form>
+
+    <!-- Table with experiments -->
+    {% if exp_pagination %}
+
+    <table class="table table-hover">
+        <caption>List of AB Experiments</caption>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">App</th>
+                <th scope="col">Experiment Name</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+            </tr>
+        </thead>
+        {% for exp in exp_pagination.items %}
+        <tr>
+            <td>{{ loop.index + ((exp_pagination.page - 1) * exp_pagination.per_page) }}</td>
+            <td>{{ exp.app.name }}</td>
+            <td><a href="{{ url_for('ab.detail', exp_name=exp.name) }}">{{ exp.clean_name }}</a></td>
+            <td>{{ exp.start_date }}</td>
+            <td>
+                {% if exp.end_date %}
+                    {{ exp.end_date }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Pagination -->
+    {{ render_pagination(exp_pagination, endpoint='ab.index', q=q) }}
+
+    {% endif %}
+</div>
+{% endblock %}
