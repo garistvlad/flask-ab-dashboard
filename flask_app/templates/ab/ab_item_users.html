@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "macros/plots/barprot_total.html" import barprot_total %}
+{% from "macros/plots/donut.html" import donut %}
+
+{% block title %}Details{% endblock %}
+
+{% block second_nav %}
+{% include "ab/_second_nav.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <p class="lead mt-3 mb-1">Number of users started the experiment</p>
+    <div class="row">
+        <div class="col-6">
+            <p class="text-center bg-light p-1">Users Total</p>
+            <embed class="img-fluid" src="{{ url_for('ab.plot_user_donut', exp_name=exp.name) }}" alt="user_donut"/>
+        </div>
+        <div class="col-6">
+            <p class="text-center bg-light p-1"># of Users, finished the period</p>
+            <canvas id="users_by_period"></canvas>
+            <figcaption class="figure-caption text-center">Users</figcaption>
+        </div>
+    </div>
+
+    <p class="lead mt-3 mb-1">Daily history of users entrance into the experiment</p>
+    <div class="row">
+        <div class="col">
+            <p class="text-center bg-light p-1">Users Daily Dynamics</p>
+            TODO...
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block plotsjs %}
+{{
+    barprot_total(
+        figure_id="users_by_period",
+        valueset=exp.get_valueset_total(col_name="cnt_users"),
+        options=exp.sorted_options,
+        percentage=False
+    )
+}}
+{% endblock %}

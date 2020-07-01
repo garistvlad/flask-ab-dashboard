@@ -32,7 +32,7 @@ def register():
         
         return redirect(url_for("auth.login"))
     
-    return render_template("auth/register.html", form=form)
+    return render_template("auth/register.html", form=form, active_link="register")
 
 
 @bp.route("/login", methods=('GET', 'POST'))
@@ -55,7 +55,7 @@ def login():
             next_page = url_for('ab.index')
         return redirect(next_page)
     
-    return render_template("auth/login.html", form=form)
+    return render_template("auth/login.html", form=form, active_link="login")
 
 
 @bp.route("/logout")

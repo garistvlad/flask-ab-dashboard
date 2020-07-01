@@ -1,0 +1,36 @@
+{% macro
+    donut(
+        figure_id,
+        valueset,
+        options
+    )
+%}
+<script>
+var ctx = document.getElementById('{{ figure_id }}');
+// predefined colorset:
+var colorset = [
+    'rgba(255, 99, 132, 0.7)',
+    'rgba(54, 162, 235, 0.7)',
+    'rgba(75, 192, 192, 0.7)',
+    'rgba(153, 102, 255, 0.7)',
+    'rgba(255, 159, 64, 0.7)',
+    'rgba(255, 206, 86, 0.7)',
+];
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for option in options %}'{{ option }}', {% endfor %}],
+        datasets: [{
+            data: [{% for i in options %}{{ valueset.get(i) }}, {% endfor %}],
+            backgroundColor: [{% for i in options %}colorset[{{ loop.index - 1 }}], {% endfor %}],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        legend: {
+            display: false
+        }
+    }
+});
+</script>
+{% endmacro %}

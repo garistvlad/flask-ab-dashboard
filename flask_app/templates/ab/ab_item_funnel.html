@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% from "macros/plots/barprot_total.html" import barprot_total %}
+{% from "macros/plots/donut.html" import donut %}
+
+{% block title %}Details{% endblock %}
+
+{% block second_nav %}
+{% include "ab/_second_nav.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Event funnel -->
+    <p class="lead bg-light p-1">Funnel from started the experiment</p>
+    <div class="row mt-0">
+        <div class="col">
+            <table class="table table-hover table-sm table-striped">
+                <caption>Funnel from started experiment</caption>
+                <thead>
+                    <tr>
+                    {% for col in ['Option', 'Users', 'Launch', 'Add Document', 'First Saw Unpaid', 'Ready to pay', 'Pay', 'Save Card'] %}
+                    <th scope="col" class='text-center'>{{ col }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in exp.sorted_options %}
+                    <tr class='text-center'>
+                        <th scope="row" class="text-left">{{ option }}</th>
+                        <td scope="row">{{ "{:,}".format(exp.metrics_json.get("cnt_users_all").get(option)) }}</td>
+                        {% for i in ["funnel_launch", "funnel_add_document", "funnel_first_saw_unpaid", "funnel_ready_to_pay", "funnel_pay", "funnel_save_card"] %}
+                        <td scope="row">{{ "{:.1%}".format(exp.metrics_json.get(i).get(option)) }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Payment funnel -->
+    <p class="lead bg-light p-1">Overall payment metrics from started the experiment</p>
+    <div class="row mt-0">
+        <div class="col-10">
+            <table class="table table-hover table-sm table-striped">
+                <caption>Total payment metrics</caption>
+                <thead>
+                    <tr>
+                    {% for col in ['Option', 'First Pay', 'Second Pay', 'Third Pay', 'Fines per User', 'Fines per Paying User', 'ARPU, rub'] %}
+                    <th scope="col" class='text-center'>{{ col }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in exp.sorted_options %}
+                    <tr class='text-center'>
+                        <th scope="row" class="text-left">{{ option }}</th>
+                        {% for i in ["funnel_first_pay", "funnel_second_pay", "funnel_third_pay"] %}
+                        <td scope="row">{{ "{:.1%}".format(exp.metrics_json.get(i).get(option)) }}</td>
+                        {% endfor %}
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_all").get(option)) }}</td>
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_pp_all").get(option)) }}</td>
+                        <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("arpu_all").get(option)) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="lead bg-light p-1">Complementary services (OSAGO, Subscriptions, etc)</p>
+    <div class="row mt-0">
+        <div class="col">
+            <p>TODO...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

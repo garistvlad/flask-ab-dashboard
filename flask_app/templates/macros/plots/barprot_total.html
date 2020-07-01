@@ -1,0 +1,59 @@
+{% macro
+    barprot_total(
+        figure_id,
+        valueset,
+        options,
+        labels=["Day-1", "Day-7", "Day-14", "Day-30", "Day-ALL"],
+        percentage=False
+    )
+%}
+<script>
+var ctx = document.getElementById('{{ figure_id }}');
+ctx.height = 200;
+// predefined colorset:
+var colorset = [
+    'rgba(255, 99, 132, 0.7)',
+    'rgba(54, 162, 235, 0.7)',
+    'rgba(75, 192, 192, 0.7)',
+    'rgba(153, 102, 255, 0.7)',
+    'rgba(255, 159, 64, 0.7)',
+    'rgba(255, 206, 86, 0.7)',
+];
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for label in labels %}'{{ label }}', {% endfor %}],
+        datasets: [
+            {% for option in options %}
+            {% with values = valueset[option] %}
+            {
+                label: '{{ option }}',
+                {% if percentage %}
+                    data: [{% for i in values %}{{ '{:.1f}'.format(i * 100) }}, {% endfor %}],
+                {% else %}
+                    data: [{% for i in values %}{{ '{:.1f}'.format(i) }}, {% endfor %}],
+                {% endif %}
+                backgroundColor: colorset[{{ loop.index - 1 }}],
+                // borderColor: colorset[{{ loop.index - 1 }}],
+                borderWidth: 1
+            },
+            {% endwith %}
+            {% endfor %}
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                barPercentage: 0.9,
+                categoryPercentage: 0.9
+            }]
+        }
+    }
+});
+</script> 
+{% endmacro %}

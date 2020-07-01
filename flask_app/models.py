@@ -57,6 +57,22 @@ class ABExperiment(db.Model):
         )
         return clean_name
 
+    @property
+    def sorted_options(self):
+        options = sorted(self.options, key=lambda x: (-x.is_control_group, x.name))
+        return [i.name for i in options]
+
+    def get_valueset_total(self, col_name='cnt_users'):
+        """ Format for further barplot_total, being rendered with chart.js """
+        if not self.metrics_json:
+            return
+        valueset = {i: [] for i in self.sorted_options}
+        for period in ["1d", "7d", "14d", "30d", "all"]:
+            tmp = self.metrics_json[f"{col_name}_{period}"]
+            for option in valueset.keys():
+                valueset[option].append(tmp[option])
+        return valueset
+
     def __repr__(self):
         return f'<Exp: {self.name}>'
 

@@ -1,7 +1,16 @@
 from flask import Blueprint
 from flask import abort, render_template, request
+### matplotlib usage ###
+import io
+from flask import Response
+from matplotlib.backends.backend_svg import FigureCanvasSVG
+from matplotlib.figure import Figure
+from matplotlib.patches import Circle
+######
+
 from flask_login import login_required
 from models import ABExperiment, App
+from ab.mpl_plots import create_figure_user_donut
 
 
 bp = Blueprint(
@@ -27,10 +36,11 @@ def index():
         .limit(100).from_self() \
         .paginate(page=page, per_page=10)
         
-    return render_template("ab/ab_list.html", exp_pagination=exp_pagination, q=q)
+    return render_template("ab/ab_list.html", exp_pagination=exp_pagination, q=q, active_link="home")
 
 
 @bp.route("/<exp_name>")
+@bp.route("/<exp_name>/index")
 @login_required
 def detail(exp_name):
     """ Detail main page for selected experiment """
@@ -38,4 +48,53 @@ def detail(exp_name):
     if exp is None:
         abort(404)
     
-    return render_template("ab/ab_item.html", exp=exp)
+    return render_template("ab/ab_item.html", exp=exp, active_link="info")
+
+
+@bp.route("/<exp_name>/funnel")
+@login_required
+def detail_funnel(exp_name):
+    """ Detail main page for selected experiment """
+    exp = ABExperiment.query.filter_by(name=exp_name).first()
+    if exp is None:
+        abort(404)
+    
+    return render_template("ab/ab_item_funnel.html", exp=exp, active_link="funnel")
+
+
+@bp.route("/<exp_name>/users")
+@login_required
+def detail_users(exp_name):
+    """ Detail main page for selected experiment """
+    exp = ABExperiment.query.filter_by(name=exp_name).first()
+    if exp is None:
+        abort(404)
+    
+    return render_template("ab/ab_item_users.html", exp=exp, active_link="users")
+
+
+@bp.route("/<exp_name>/stats")
+@login_required
+def detail_stats(exp_name):
+    """ Detail main page for selected experiment """
+    exp = ABExperiment.query.filter_by(name=exp_name).first()
+    if exp is None:
+        abort(404)
+    
+    return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats")
+
+
+@bp.route('/<exp_name>/donut.png')
+def plot_user_donut(exp_name):
+    # <img src="/plot.png" alt="my plot">
+    exp = ABExperiment.query.filter_by(name=exp_name).first()
+    if exp is None:
+        abort(404)
+    
+    data = exp.metrics_json.get("cnt_users_all")
+    user_count = [data.get(i) for i in exp.sorted_options]
+    fig = create_figure_user_donut(user_count, exp.sorted_options)
+    output = io.BytesIO()
+    FigureCanvasSVG(fig).print_svg(output)
+    
+    return Response(output.getvalue(), mimetype='image/svg+xml')
