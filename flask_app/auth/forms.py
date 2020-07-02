@@ -13,7 +13,7 @@ class RegistrationForm(FlaskForm):
 
     def validate_email(self, field):
         # authorized domain zone
-        if field.data.strip().split("@")[-1] not in ["pay-s.ru", "pays.ru", "bip.ru"]:
+        if field.data.strip().split("@")[-1] not in ["pay-s.ru", "pays.ru", "bip.ru", "mpp-rus.ru"]:
             raise ValidationError(message="Wrong email domain. Please, contact v.garist to request an access.")
 
         # user is already exists
