@@ -65,12 +65,11 @@ def detail_users(exp_name):
     return render_template("ab/ab_item_users.html", exp=exp, active_link="users")
 
 
-@bp.route("/<exp_name>/stats")
+@bp.route("/<exp_name>/stats/<period>", methods=['GET', 'POST'])
 @login_required
-def detail_stats(exp_name):
+def detail_stats(exp_name, period='all'):
     """ Detail main page for selected experiment """
     exp = ABExperiment.query.filter_by(name=exp_name).first()
     if exp is None:
         abort(404)
-    
-    return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats")
+    return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats", period=period)

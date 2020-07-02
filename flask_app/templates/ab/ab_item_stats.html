@@ -10,27 +10,63 @@
 
 {% block content %}
 <div class="container">
-<div class="row">
-    <div class="col-6">
-        <p class="text-center bg-light p-1">Conversion[%] + 95% Confidence Interval</p>
-        <embed class="img-fluid"
-            src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='conversion', period='all')) }}"
-            alt="Conversion[%] PDF + 95% confidence interval"
-        />
-        <figcaption class="figure-caption text-center">Conversion, %</figcaption>
+    <div class="button-groud text-center mb-4">
+        <p class="lead bg-light p-1">Choose a period</p>
+        {% for i in ['all', '1d', '7d', '14d', '30d'] %}
+            <a href="{{ url_for('ab.detail_stats', exp_name=exp.name, period=i) }}">
+                <button type="button" class="btn btn-sm col-2 btn-outline-secondary mr-2 {{ 'active' if i == period else None }}">
+                    {{ i.upper() }}
+                </button>
+            </a>
+        {% endfor %}
     </div>
-    <div class="col-6">
-        <p class="text-center bg-light p-1">ARPU[rub] + 95% Confidence Interval</p>
-        <embed class="img-fluid"
-            src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='arpu', period='all')) }}"
-            alt="ARPU[rub] PDF + 95% confidence interval"
-        />
-        <figcaption class="figure-caption text-center">ARPU, rub</figcaption>
+    <!-- Payment funnel -->
+    <p class="lead bg-light p-1">Payment metrics for period <b>{{ period }}</b></p>
+    <div class="row mt-0">
+        <div class="col-12">
+            <table class="table table-hover table-sm table-striped">
+                <caption>Payment metrics | {{ period }}</caption>
+                <thead>
+                    <tr>
+                    {% for col in ['Option', '# of Users', 'Conversion Pay', 'Fines per User', 'Fines per Paying User', 'ARPU, rub'] %}
+                    <th scope="col" class='text-center'>{{ col }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in exp.sorted_options %}
+                    <tr class='text-center'>
+                        <th scope="row" class="text-left">{{ option }}</th>
+                        <td scope="row">{{ "{:,}".format(exp.metrics_json.get("cnt_users_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.1%}".format(exp.metrics_json.get("conversion_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_pp_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("arpu_"+period).get(option)) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Distributions -->
+    <p class="lead bg-light p-1">Bootstrap distributions to determine statistical significance (Conversion and ARPU for period <b>{{ period }}</b>)</p>
+    <div class="row">
+        <div class="col-6">
+            <p class="text-center bg-light p-1">Conversion[%] + 95% Confidence Interval</p>
+            <embed class="img-fluid"
+                src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='conversion', period=period)) }}"
+                alt="Conversion[%] PDF + 95% confidence interval"
+            />
+            <figcaption class="figure-caption text-center">Conversion, %</figcaption>
+        </div>
+        <div class="col-6">
+            <p class="text-center bg-light p-1">ARPU[rub] + 95% Confidence Interval</p>
+            <embed class="img-fluid"
+                src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='arpu', period=period)) }}"
+                alt="ARPU[rub] PDF + 95% confidence interval"
+            />
+            <figcaption class="figure-caption text-center">ARPU, rub</figcaption>
+        </div>
     </div>
 </div>
-</div>
-{% endblock %}
-
-{% block plotsjs %}
-
 {% endblock %}
