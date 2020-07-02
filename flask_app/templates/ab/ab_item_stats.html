@@ -12,7 +12,20 @@
 <div class="container">
 <div class="row">
     <div class="col-6">
-        TODO...
+        <p class="text-center bg-light p-1">Conversion[%] + 95% Confidence Interval</p>
+        <embed class="img-fluid"
+            src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='conversion', period='all')) }}"
+            alt="Conversion[%] PDF + 95% confidence interval"
+        />
+        <figcaption class="figure-caption text-center">Conversion, %</figcaption>
+    </div>
+    <div class="col-6">
+        <p class="text-center bg-light p-1">ARPU[rub] + 95% Confidence Interval</p>
+        <embed class="img-fluid"
+            src="{{ url_for('static', filename=exp.get_pdf_and_confint_svg_url(col_name='arpu', period='all')) }}"
+            alt="ARPU[rub] PDF + 95% confidence interval"
+        />
+        <figcaption class="figure-caption text-center">ARPU, rub</figcaption>
     </div>
 </div>
 </div>

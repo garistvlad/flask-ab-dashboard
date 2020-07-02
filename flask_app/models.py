@@ -1,3 +1,4 @@
+from flask import url_for
 from flask_login import UserMixin
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -61,6 +62,15 @@ class ABExperiment(db.Model):
     def sorted_options(self):
         options = sorted(self.options, key=lambda x: (-x.is_control_group, x.name))
         return [i.name for i in options]
+
+    def get_user_donut_svg_url(self):
+        return f'img/ab/{self.name}/user_donut.svg'
+    
+    def get_user_dynamics_svg_url(self):
+        return f'img/ab/{self.name}/user_dynamics.svg'
+
+    def get_pdf_and_confint_svg_url(self, col_name="conversion", period="all"):
+        return f'img/ab/{self.name}/pdf_{col_name}_{period}.svg'
 
     def get_valueset_total(self, col_name='cnt_users'):
         """ Format for further barplot_total, being rendered with chart.js """

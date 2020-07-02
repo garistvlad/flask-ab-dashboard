@@ -1,16 +1,8 @@
 from flask import Blueprint
 from flask import abort, render_template, request
-### matplotlib usage ###
-import io
-from flask import Response
-from matplotlib.backends.backend_svg import FigureCanvasSVG
-from matplotlib.figure import Figure
-from matplotlib.patches import Circle
-######
 
 from flask_login import login_required
 from models import ABExperiment, App
-from ab.mpl_plots import create_figure_user_donut
 
 
 bp = Blueprint(
@@ -82,19 +74,3 @@ def detail_stats(exp_name):
         abort(404)
     
     return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats")
-
-
-@bp.route('/<exp_name>/donut.png')
-def plot_user_donut(exp_name):
-    # <img src="/plot.png" alt="my plot">
-    exp = ABExperiment.query.filter_by(name=exp_name).first()
-    if exp is None:
-        abort(404)
-    
-    data = exp.metrics_json.get("cnt_users_all")
-    user_count = [data.get(i) for i in exp.sorted_options]
-    fig = create_figure_user_donut(user_count, exp.sorted_options)
-    output = io.BytesIO()
-    FigureCanvasSVG(fig).print_svg(output)
-    
-    return Response(output.getvalue(), mimetype='image/svg+xml')

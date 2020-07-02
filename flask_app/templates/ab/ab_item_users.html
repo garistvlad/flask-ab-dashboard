@@ -14,7 +14,8 @@
     <div class="row">
         <div class="col-6">
             <p class="text-center bg-light p-1">Users Total</p>
-            <embed class="img-fluid" src="{{ url_for('ab.plot_user_donut', exp_name=exp.name) }}" alt="user_donut"/>
+            <embed class="img-fluid" src="{{ url_for('static', filename=exp.get_user_donut_svg_url()) }}" alt="user_donut"/>
+            <figcaption class="figure-caption text-center">Users by options</figcaption>
         </div>
         <div class="col-6">
             <p class="text-center bg-light p-1"># of Users, finished the period</p>
@@ -27,7 +28,8 @@
     <div class="row">
         <div class="col">
             <p class="text-center bg-light p-1">Users Daily Dynamics</p>
-            TODO...
+            <embed class="img-fluid" src="{{ url_for('static', filename=exp.get_user_dynamics_svg_url()) }}" alt="user_donut"/>
+            <figcaption class="figure-caption text-center">Users by date</figcaption>
         </div>
     </div>
 </div>
