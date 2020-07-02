@@ -7,11 +7,10 @@
 <div class="container">
     <!-- Search form -->
     <form action="{{ url_for('ab.index') }}" method="GET">
-        <div class="form-group my-1">
+        <div class="form-group mt-2 mb-1">
         {% if q and q != "" %}
             <p class="lead">Result for: <i>{{ q }}</i></p>
         {% endif %}
-            <i class="fa fa-search form-control-feedback"></i>
             <input class="form-control" type="text" name="q" placeholder="Search" aria-label="Search">
         </div>
     </form>
