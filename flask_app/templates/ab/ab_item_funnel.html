@@ -69,8 +69,30 @@
 
     <p class="lead bg-light p-1">Complementary services (OSAGO, Subscriptions, etc)</p>
     <div class="row mt-0">
-        <div class="col">
-            <p>TODO...</p>
+        <div class="col-12">
+            <table class="table table-hover table-sm table-striped">
+                <caption>Complementary services</caption>
+                <thead>
+                    <tr>
+                    {% for col in ['Option', 'Users, paid OSAGO', 'OSAGO policies', 'OSAGO ARPU, rub', 'Users, paid subs', 'Subscriptions', 'Subscriptions ARPU, rub'] %}
+                    <th scope="col" class='text-center'>{{ col }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for option in exp.sorted_options %}
+                    <tr class='text-center'>
+                        <th scope="row" class="text-left">{{ option }}</th>
+                        <td scope="row">{{ "{:d}".format(exp.metrics_json.get("funnel_purchase_osago").get(option)) }}</td>
+                        <td scope="row">{{ "{:d}".format(exp.metrics_json.get("funnel_cnt_osago").get(option)) }}</td>
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("osago_arpu_all").get(option)) }}</td>
+                        <td scope="row">{{ "{:d}".format(exp.metrics_json.get("funnel_subscription_paid").get(option)) }}</td>
+                        <td scope="row">{{ "{:d}".format(exp.metrics_json.get("funnel_cnt_subscription").get(option)) }}</td>
+                        <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("subscription_arpu_all").get(option)) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

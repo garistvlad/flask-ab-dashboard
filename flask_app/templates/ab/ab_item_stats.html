@@ -12,7 +12,8 @@
 <div class="container">
     <div class="button-groud text-center mb-4">
         <p class="lead bg-light p-1">Choose a period</p>
-        {% for i in ['all', '1d', '7d', '14d', '30d'] %}
+        <!-- no need for 14d -->
+        {% for i in ['all', '1d', '7d', '30d'] %}
             <a href="{{ url_for('ab.detail_stats', exp_name=exp.name, period=i) }}">
                 <button type="button" class="btn btn-sm col-2 btn-outline-secondary mr-2 {{ 'active' if i == period else None }}">
                     {{ i.upper() }}
@@ -28,7 +29,7 @@
                 <caption>Payment metrics | {{ period }}</caption>
                 <thead>
                     <tr>
-                    {% for col in ['Option', '# of Users', 'Conversion Pay', 'Fines per User', 'Fines per Paying User', 'ARPU, rub'] %}
+                    {% for col in ['Option', '# of Users', 'Conversion Pay', 'Fines per User', 'Fines per Paying User', 'ARPU-fines, rub', 'ARPU-osago, rub', 'ARPU-subs, rub', 'ARPU-total, rub'] %}
                     <th scope="col" class='text-center'>{{ col }}</th>
                     {% endfor %}
                     </tr>
@@ -42,6 +43,9 @@
                         <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_"+period).get(option)) }}</td>
                         <td scope="row">{{ "{:.2f}".format(exp.metrics_json.get("avg_fines_pp_"+period).get(option)) }}</td>
                         <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("arpu_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("osago_arpu_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("subscription_arpu_"+period).get(option)) }}</td>
+                        <td scope="row">{{ "{:.1f}".format(exp.metrics_json.get("total_arpu_"+period).get(option)) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
