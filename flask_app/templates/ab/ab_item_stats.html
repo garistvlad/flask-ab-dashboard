@@ -14,11 +14,17 @@
         <p class="lead bg-light p-1">Choose a period</p>
         <!-- no need for 14d -->
         {% for i in ['all', '1d', '7d', '30d'] %}
+            {% if exp.is_period_data_exists(i) %}
             <a href="{{ url_for('ab.detail_stats', exp_name=exp.name, period=i) }}">
                 <button type="button" class="btn btn-sm col-2 btn-outline-secondary mr-2 {{ 'active' if i == period else None }}">
                     {{ i.upper() }}
                 </button>
             </a>
+            {% else %}
+            <button type="button" class="btn btn-sm col-2 btn-outline-secondary mr-2" disabled>
+                {{ i.upper() }}
+            </button>
+            {% endif %}
         {% endfor %}
     </div>
     <!-- Payment funnel -->

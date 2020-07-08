@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import abort, render_template, request
+from flask import abort, flash, render_template, request, redirect, url_for
 
 from flask_login import login_required
 from models import ABExperiment, App
@@ -72,4 +72,9 @@ def detail_stats(exp_name, period='all'):
     exp = ABExperiment.query.filter_by(name=exp_name).first()
     if exp is None:
         abort(404)
+    
+    if not exp.is_period_data_exists(period):
+        flash(message=f"There are not data for period '{period}'. Redirect to period 'all'", category="info")
+        return redirect(url_for("ab.detail_stats", exp_name=exp.name, period="all"))
+    
     return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats", period=period)

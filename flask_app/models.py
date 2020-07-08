@@ -63,6 +63,10 @@ class ABExperiment(db.Model):
         options = sorted(self.options, key=lambda x: (-x.is_control_group, x.name))
         return [i.name for i in options]
 
+    def is_period_data_exists(self, period):
+        """ Chech, wether data exists for requested period (cnt_users > 0 for all options) """
+        return all([i > 0 for i in self.metrics_json.get(f"cnt_users_{period}").values()])
+
     def get_user_donut_svg_url(self):
         return f'img/ab/{self.name}/user_donut.svg'
     
@@ -77,7 +81,7 @@ class ABExperiment(db.Model):
         if not self.metrics_json:
             return
         valueset = {i: [] for i in self.sorted_options}
-        for period in ["1d", "7d", "14d", "30d", "all"]:
+        for period in ["1d", "7d", "30d", "all"]:
             tmp = self.metrics_json[f"{col_name}_{period}"]
             for option in valueset.keys():
                 valueset[option].append(tmp[option])
