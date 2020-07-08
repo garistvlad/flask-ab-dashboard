@@ -74,7 +74,8 @@ def detail_stats(exp_name, period='all'):
         abort(404)
     
     if not exp.is_period_data_exists(period):
-        flash(message=f"There are not data for period '{period}'. Redirect to period 'all'", category="info")
+        flash(message=f"There are no users, finished the period '{period}'. Redirect to period 'all'", category="info")
         return redirect(url_for("ab.detail_stats", exp_name=exp.name, period="all"))
     
     return render_template("ab/ab_item_stats.html", exp=exp, active_link="stats", period=period)
+ 
