@@ -19,7 +19,7 @@
                     <a class="nav-link" href="{{ url_for('ab.detail_users', exp_name=exp.name) }}">Users</a>
                 </li>
                 <li class="nav-item {{ 'active' if active_link == 'stats' else None }} mr-4">
-                    <a class="nav-link" href="{{ url_for('ab.detail_stats', exp_name=exp.name, period='all') }}">Statistics</a>
+                    <a class="nav-link" href="{{ url_for('ab.detail_stats', exp_name=exp.name, period='1d') }}">Statistics</a>
                 </li>
             </ul>
         </div>

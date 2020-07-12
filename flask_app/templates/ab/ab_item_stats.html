@@ -13,7 +13,7 @@
     <div class="button-groud text-center mb-4">
         <p class="lead bg-light p-1">Choose a period</p>
         <!-- no need for 14d -->
-        {% for i in ['all', '1d', '7d', '30d'] %}
+        {% for i in ['1d', '7d', '30d', 'all'] %}
             {% if exp.is_period_data_exists(i) %}
             <a href="{{ url_for('ab.detail_stats', exp_name=exp.name, period=i) }}">
                 <button type="button" class="btn btn-sm col-2 btn-outline-secondary mr-2 {{ 'active' if i == period else None }}">
