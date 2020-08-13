@@ -64,7 +64,7 @@ def edit_experiment(exp_name):
 
         db.session.commit()
         flash(f"[{exp.name}]`s changes saved", category="success")
-        return redirect(url_for("ab.detail", exp_name=exp.name))
+        return redirect(url_for("ab.index"))
     
     return render_template(
         "admin/edit_experiment.html",
