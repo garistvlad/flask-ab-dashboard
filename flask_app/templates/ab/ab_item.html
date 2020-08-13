@@ -13,7 +13,11 @@
     <div class="jumbotron jumbotron-fluid my-0">
         <div class="container">
         {% if exp %}
+            {% if current_user.is_admin %}
+            <h2>{{ exp.clean_name }} | {{ exp.app.name }} | <a href="{{ url_for('admin.edit_experiment', exp_name=exp.name) }}">Edit</a></h2>
+            {% else %}
             <h2>{{ exp.clean_name }} | {{ exp.app.name }}</h2>
+            {% endif %}
             <p class="lead">{{ exp.description }}</p>
         {% endif %}
         </div>
