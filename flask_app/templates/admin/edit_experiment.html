@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Experiment{% endblock %}
+
+{% block content %}
+<div class="container pt-3">
+    <p class="mt-2 lead">Modify the experiment: [<span class="font-weight-bold">{{ exp.name }}</span>]</p>
+    <hr>
+    <div class="row">
+        <div class="col-8">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label>{{ form.app.label.text }}</label>
+                            <select class="form-control" id="{{ form.app.id }}" name="{{ form.app.name }}">
+                                {% for app in apps %}
+                                {% if exp.app.id == app.id %}
+                                    <option value="{{ app.id }}" selected="selected">{{ app.name }}</option>
+                                {% else %}
+                                    <option value="{{ app.id }}">{{ app.name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% if form.app.errors %}
+                                {% for error in form.app.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>{{ form.exp_name.label.text }}</label>
+                            {{ form.exp_name(class="form-control", placeholder=form.exp_name.label.text, value=exp.name) }}
+                            {% if form.exp_name.errors %}
+                                {% for error in form.exp_name.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ form.description.label.text}}</label>
+                    <textarea class="form-control form-control" id="{{ form.description.id }}" name="{{ form.description.name }}" rows="3">{{ exp.description }}</textarea>
+                    {% if form.description.errors %}
+                        {% for error in form.description.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>{{ form.start_date.label.text}}</label>
+                            {{ form.start_date(class="form-control", placeholder=form.start_date.label.text, value=exp.start_date) }}
+                            {% if form.start_date.errors %}
+                                {% for error in form.start_date.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>{{ form.end_date.label.text}}</label>
+                            {{ form.end_date(class="form-control", placeholder=form.end_date.label.text, value=exp.end_date) }}
+                            {% if form.end_date.errors %}
+                                {% for error in form.end_date.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead bg-light p-1">Control options</p>
+                        {% with n_control_options = control_options|length %}
+                        <div class="form-group">
+                            {% if n_control_options >= 1 %}
+                            {{ form.option_control1(class="form-control", placeholder=form.option_control1.label.text, value=control_options[0].name) }}
+                            {% else %}
+                            {{ form.option_control1(class="form-control", placeholder=form.option_control1.label.text) }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if n_control_options >= 2 %}
+                            {{ form.option_control2(class="form-control", placeholder=form.option_control2.label.text, value=control_options[1].name) }}
+                            {% else %}
+                            {{ form.option_control2(class="form-control", placeholder=form.option_control2.label.text) }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if n_control_options >= 3 %}
+                            {{ form.option_control3(class="form-control", placeholder=form.option_control3.label.text, value=control_options[2].name) }}
+                            {% else %}
+                            {{ form.option_control3(class="form-control", placeholder=form.option_control3.label.text) }}
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                    </div>
+                    <div class="col">
+                        <p class="lead bg-light p-1">Test options</p>
+                        {% with n_test_options = test_options|length %}
+                        <div class="form-group">
+                            {% if n_test_options >= 1 %}
+                            {{ form.option_test1(class="form-control", placeholder=form.option_test1.label.text, value=test_options[0].name) }}
+                            {% else %}
+                            {{ form.option_test1(class="form-control", placeholder=form.option_test1.label.text) }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if n_test_options >= 2 %}
+                            {{ form.option_test2(class="form-control", placeholder=form.option_test2.label.text, value=test_options[1].name) }}
+                            {% else %}
+                            {{ form.option_test2(class="form-control", placeholder=form.option_test2.label.text) }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {% if n_test_options >= 3 %}
+                            {{ form.option_test3(class="form-control", placeholder=form.option_test3.label.text, value=test_options[2].name) }}
+                            {% else %}
+                            {{ form.option_test3(class="form-control", placeholder=form.option_test3.label.text) }}
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

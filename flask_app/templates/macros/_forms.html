@@ -1,8 +1,12 @@
-{% macro render_field(field) %}
+{% macro render_field(field, value=None) %}
 <div class="form-group">
     {{ field.label(class="sr-only") }}
     <div class="input-group">
-        {{ field(class="form-control form-control-lg", placeholder=field.label.text) }}
+        {% if value %}
+            {{ field(class="form-control form-control-lg", placeholder=field.label.text, value=value) }}
+        {% else %}
+            {{ field(class="form-control form-control-lg", placeholder=field.label.text) }}
+        {% endif %}
     </div>
     {% if field.errors %}
         {% for error in field.errors %}

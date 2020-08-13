@@ -27,6 +27,9 @@
                 <th scope="col">Experiment Name</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
+                {% if current_user.is_admin %}
+                    <th scope="col"></th>
+                {% endif %}
             </tr>
         </thead>
         {% for exp in exp_pagination.items %}
@@ -40,6 +43,11 @@
                     {{ exp.end_date }}
                 {% endif %}
             </td>
+            {% if current_user.is_admin %}
+            <td>
+                <a href="{{ url_for('admin.edit_experiment', exp_name=exp.name) }}">Edit</a>
+            </td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
