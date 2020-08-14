@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}List of Users{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-7">
+        <p class="mt-2 lead">Manage user privileges</p>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <table class="table table-hover table-striped">
+                <caption>List of Users</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Is Admin?</th>
+                    </tr>
+                </thead>
+                {% for u in user_list %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>
+                        <div class="form-check">
+                        {% if u.is_admin %}
+                            <input class="form-check-input" type="checkbox" value="{{ u.id }}" name="switcher" id="{{u.id}}" checked>
+                        {% else %}
+                            <input class="form-check-input" type="checkbox" value="{{ u.id }}" name="switcher" id="{{u.id}}">
+                        {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-primary">Save changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

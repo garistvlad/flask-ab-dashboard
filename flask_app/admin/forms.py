@@ -24,12 +24,6 @@ class ABExperimentForm(FlaskForm):
     option_test3 = StringField('Test option #3', validators=[Optional()])
 
 
-class ABOptionForm(FlaskForm):
-    option_name = StringField("Option Name", validators=[DataRequired()])
-    is_control_group = BooleanField("Control Group?")
-
-
 class UserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     is_admin = BooleanField("Admin?")

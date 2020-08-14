@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import abort, redirect, url_for, render_template, flash, request
 from flask_login import login_required
 
-from .forms import ABExperimentForm, ABOptionForm, UserForm, App
+from .forms import ABExperimentForm, UserForm, App
 from models import ABExperiment, ABOption, User
 from main import db
 
@@ -16,8 +16,25 @@ bp = Blueprint(
 @bp.route("/manage_users", methods=['GET', 'POST'])
 @login_required
 def manage_users():
-    # TODO
-    return redirect(url_for("ab.index", active_link="manage_users"))
+    """
+    Add or Remove admin access rights to users
+    """
+    user_list = User.query.all()
+    form = UserForm(request.form)
+    if form.is_submitted():
+        admins = [int(i) for i in request.form.getlist(f'switcher')]
+        for u in user_list:
+            if u.id in admins:
+                u.is_admin = True
+            else:
+                u.is_admin = False
+            db.session.add(u)
+            db.session.commit()
+        
+        flash("Privileges saved", category="success")
+        return redirect(url_for("admin.manage_users"))
+
+    return render_template("admin/user_list.html", active_link="manage_users", user_list=user_list, form=form)
 
 
 @bp.route("/delete_experiment/<exp_name>", methods=['GET', 'POST'])
