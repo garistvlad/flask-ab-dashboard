@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Experiment{% endblock %}
+{% block title %}Create Experiment{% endblock %}
 
 {% block content %}
 <div class="container pt-3">
-    <p class="mt-2 lead">Modify the experiment: [<span class="font-weight-bold">{{ exp.name }}</span>]</p>
+    <p class="mt-2 lead">Create new experiment</p>
     <hr>
     <div class="row">
         <div class="col-8">
@@ -16,11 +16,7 @@
                             <label>{{ form.app.label.text }}</label>
                             <select class="form-control" id="{{ form.app.id }}" name="{{ form.app.name }}">
                                 {% for app in apps %}
-                                {% if exp.app.id == app.id %}
-                                    <option value="{{ app.id }}" selected="selected">{{ app.name }}</option>
-                                {% else %}
                                     <option value="{{ app.id }}">{{ app.name }}</option>
-                                {% endif %}
                                 {% endfor %}
                             </select>
                             {% if form.app.errors %}
@@ -33,7 +29,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>{{ form.exp_name.label.text }}</label>
-                            {{ form.exp_name(class="form-control", placeholder=form.exp_name.label.text, value=exp.name) }}
+                            {{ form.exp_name(class="form-control", placeholder=form.exp_name.label.text) }}
                             {% if form.exp_name.errors %}
                                 {% for error in form.exp_name.errors %}
                                 <p class="text-danger">{{ error }}</p>
@@ -44,7 +40,7 @@
                 </div>
                 <div class="form-group">
                     <label>{{ form.description.label.text}}</label>
-                    <textarea class="form-control form-control" id="{{ form.description.id }}" name="{{ form.description.name }}" rows="3">{{ exp.description }}</textarea>
+                    <textarea class="form-control form-control" id="{{ form.description.id }}" name="{{ form.description.name }}" rows="3" placeholder="Describe an experiment shortly"></textarea>
                     {% if form.description.errors %}
                         {% for error in form.description.errors %}
                         <p class="text-danger">{{ error }}</p>
@@ -55,7 +51,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>{{ form.start_date.label.text}}</label>
-                            {{ form.start_date(class="form-control", placeholder=form.start_date.label.text, value=exp.start_date) }}
+                            {{ form.start_date(class="form-control", placeholder=form.start_date.label.text) }}
                             {% if form.start_date.errors %}
                                 {% for error in form.start_date.errors %}
                                 <p class="text-danger">{{ error }}</p>
@@ -66,7 +62,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>{{ form.end_date.label.text}}</label>
-                            {{ form.end_date(class="form-control", placeholder=form.end_date.label.text, value=exp.end_date) }}
+                            {{ form.end_date(class="form-control", placeholder=form.end_date.label.text) }}
                             {% if form.end_date.errors %}
                                 {% for error in form.end_date.errors %}
                                 <p class="text-danger">{{ error }}</p>
@@ -79,60 +75,31 @@
                 <div class="row">
                     <div class="col">
                         <p class="lead bg-light p-1">Control options</p>
-                        {% with n_control_options = control_options|length %}
                         <div class="form-group">
-                            {% if n_control_options >= 1 %}
-                            {{ form.option_control1(class="form-control", placeholder=form.option_control1.label.text, value=control_options[0].name) }}
-                            {% else %}
                             {{ form.option_control1(class="form-control", placeholder=form.option_control1.label.text) }}
-                            {% endif %}
                         </div>
                         <div class="form-group">
-                            {% if n_control_options >= 2 %}
-                            {{ form.option_control2(class="form-control", placeholder=form.option_control2.label.text, value=control_options[1].name) }}
-                            {% else %}
                             {{ form.option_control2(class="form-control", placeholder=form.option_control2.label.text) }}
-                            {% endif %}
                         </div>
                         <div class="form-group">
-                            {% if n_control_options >= 3 %}
-                            {{ form.option_control3(class="form-control", placeholder=form.option_control3.label.text, value=control_options[2].name) }}
-                            {% else %}
                             {{ form.option_control3(class="form-control", placeholder=form.option_control3.label.text) }}
-                            {% endif %}
                         </div>
-                        {% endwith %}
                     </div>
                     <div class="col">
                         <p class="lead bg-light p-1">Test options</p>
-                        {% with n_test_options = test_options|length %}
                         <div class="form-group">
-                            {% if n_test_options >= 1 %}
-                            {{ form.option_test1(class="form-control", placeholder=form.option_test1.label.text, value=test_options[0].name) }}
-                            {% else %}
                             {{ form.option_test1(class="form-control", placeholder=form.option_test1.label.text) }}
-                            {% endif %}
                         </div>
                         <div class="form-group">
-                            {% if n_test_options >= 2 %}
-                            {{ form.option_test2(class="form-control", placeholder=form.option_test2.label.text, value=test_options[1].name) }}
-                            {% else %}
                             {{ form.option_test2(class="form-control", placeholder=form.option_test2.label.text) }}
-                            {% endif %}
                         </div>
                         <div class="form-group">
-                            {% if n_test_options >= 3 %}
-                            {{ form.option_test3(class="form-control", placeholder=form.option_test3.label.text, value=test_options[2].name) }}
-                            {% else %}
                             {{ form.option_test3(class="form-control", placeholder=form.option_test3.label.text) }}
-                            {% endif %}
                         </div>
-                        {% endwith %}
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg">Save changes</button>
-                    <a class="btn btn-block btn-outline-danger" href="{{ url_for('admin.delete_experiment', exp_name=exp.name) }}" role="button">Delete experiment</a>
+                    <button type="submit" class="btn btn-block btn-primary btn-lg">Create experiment</button>
                 </div>
             </form>
         </div>
