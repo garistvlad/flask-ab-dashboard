@@ -18,7 +18,7 @@
                 <caption>Funnel from started experiment</caption>
                 <thead>
                     <tr>
-                    {% for col in ['Option', 'Users', 'Launch', 'Add Document', 'First Saw Unpaid', 'Ready to pay', 'Pay', 'Save Card'] %}
+                    {% for col in ['Option', 'Users', 'Launch', 'Add Document', 'Sign Up', 'First Saw Unpaid', 'Ready to pay', 'Pay', 'Save Card'] %}
                     <th scope="col" class='text-center'>{{ col }}</th>
                     {% endfor %}
                     </tr>
@@ -28,8 +28,8 @@
                     <tr class='text-center'>
                         <th scope="row" class="text-left">{{ option }}</th>
                         <td scope="row">{{ "{:,}".format(exp.metrics_json.get("cnt_users_all").get(option)) }}</td>
-                        {% for i in ["funnel_launch", "funnel_add_document", "funnel_first_saw_unpaid", "funnel_ready_to_pay", "funnel_pay", "funnel_save_card"] %}
-                        <td scope="row">{{ "{:.1%}".format(exp.metrics_json.get(i).get(option)) }}</td>
+                        {% for i in ["funnel_launch", "funnel_add_document", "funnel_sign_up", "funnel_first_saw_unpaid", "funnel_ready_to_pay", "funnel_pay", "funnel_save_card"] %}
+                        <td scope="row">{{ "{:.1%}".format(exp.metrics_json.get(i, dict()).get(option, 0)) }}</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
